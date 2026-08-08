@@ -495,6 +495,7 @@
           <button class="step-btn plus" onclick="changeSheetPortions(1)">+</button>
         </div>
       </div>
+      <button type="button" class="outline subtle btn-block" id="dayEditorViewRecipeBtn" style="display:none;margin-bottom:14px" onclick="viewRecipeFromDayEditor()">Bekijk recept</button>
     </div>
     <div id="dayEditorNoteFields" style="display:none">
       <input type="text" id="dayEditorNotitie" placeholder="bv. restjes van maandag">
@@ -801,6 +802,7 @@
     );
     const beschikbaar = recipes.filter(r => (r.status === 'Actief' || nogRelevantIds.has(r.id)) && (!q || r.titel.toLowerCase().includes(q)))
       .sort((a, b) => a.titel.localeCompare(b.titel, 'nl'));
+    document.getElementById('dayEditorViewRecipeBtn').style.display = dayEditorSelectedRecipeId ? 'block' : 'none';
     const el = document.getElementById('dayEditorRecipePicker');
     if (!beschikbaar.length) {
       el.innerHTML = '<div style="font-size:13px;color:var(--muted-2);padding:8px 4px">(nog geen recepten in je selectie)</div>';
@@ -849,6 +851,13 @@
   function closeDayEditor() {
     document.getElementById('dayEditorOverlay').style.display = 'none';
     dayEditorDate = null;
+  }
+
+  function viewRecipeFromDayEditor() {
+    if (!dayEditorSelectedRecipeId) return;
+    const id = dayEditorSelectedRecipeId;
+    closeDayEditor();
+    openDetail(id);
   }
 
   function saveDayEditor() {
